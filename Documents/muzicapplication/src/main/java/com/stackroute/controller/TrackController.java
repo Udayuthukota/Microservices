@@ -2,9 +2,11 @@ package com.stackroute.controller;
 
 import com.stackroute.domain.Track;
 import com.stackroute.repository.TrackRepository;
+import com.stackroute.service.ITrackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +18,15 @@ public class TrackController {
     @Autowired
     private TrackRepository trackRepository;
 
+    @Autowired
+    ITrackService trackService;
+
+    @GetMapping("/showTracks/{name}")
+    public List<Track> findTrackName(@PathVariable String name) {
+        List<Track> tracks = (List<Track>) trackService.findByName(name);
+        return tracks;
+    }
+
     @GetMapping("/track")
     public List<Track> retrieveAllTracks() {
         return trackRepository.findAll();
@@ -24,10 +35,8 @@ public class TrackController {
     @GetMapping("/track/{id}")
     public Track retrieveTrack(@PathVariable int id) {
         Optional<Track> track = trackRepository.findById(id);
-
 //        if (!track.isPresent())
 //            throw new TrackNotFoundException("id-" + id);
-
         return track.get();
     }
 
