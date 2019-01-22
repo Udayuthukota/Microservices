@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(value="api/v1")
+@RequestMapping(value="api/v2")
 public class TrackController {
     @Autowired
     private TrackRepository trackRepository;
