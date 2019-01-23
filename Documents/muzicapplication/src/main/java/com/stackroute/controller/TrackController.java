@@ -24,18 +24,11 @@ public class TrackController {
     }
 
     @PostMapping("track")
-    public ResponseEntity<?> saveTrack(@RequestBody Track track)
+    public ResponseEntity<?> saveTrack(@RequestBody Track track) throws TrackAlreadyExistsException
     {
         ResponseEntity responseEntity;
-        try
-        {
-            trackService.saveTrack(track);
-            responseEntity=new ResponseEntity<String>("Successfully Created", HttpStatus.CREATED);
-        }
-        catch(TrackAlreadyExistsException ex)
-        {
-            responseEntity=new ResponseEntity<String>(ex.getMessage(),HttpStatus.CONFLICT);
-        }
+        trackService.saveTrack(track);
+        responseEntity=new ResponseEntity<String>("Successfully Created", HttpStatus.CREATED);
         return responseEntity;
     }
 
@@ -43,73 +36,35 @@ public class TrackController {
     public ResponseEntity<List<Track>> getAllUser()
     {
         ResponseEntity responseEntity;
-        try {
-            responseEntity = new ResponseEntity<List<Track>>(trackService.getAllTrack(),HttpStatus.OK);
-        }
-        catch (Exception ex)
-        {
-            responseEntity = new ResponseEntity<String>(ex.getMessage(),HttpStatus.CONFLICT);
-        }
+        responseEntity = new ResponseEntity<List<Track>>(trackService.getAllTrack(),HttpStatus.OK);
         return responseEntity;
     }
 
     @PutMapping("/track/{id}")
-    public ResponseEntity<?> updateTrack(@RequestBody Track track, @PathVariable int id)
-    {
+    public ResponseEntity<?> updateTrack(@RequestBody Track track, @PathVariable int id) throws TrackNotFoundException {
         ResponseEntity responseEntity;
-        try
-        {
-            trackService.updateTrack(track,id);
-            responseEntity=new ResponseEntity<String>("Successfully Updated", HttpStatus.CREATED);
-        }
-        catch(TrackNotFoundException ex)
-        {
-            responseEntity=new ResponseEntity<String>(ex.getMessage(),HttpStatus.CONFLICT);
-        }
+        trackService.updateTrack(track,id);
+        responseEntity=new ResponseEntity<String>("Successfully Updated", HttpStatus.CREATED);
         return responseEntity;
     }
 
     @DeleteMapping(value = "/track/{id}")
-    public ResponseEntity<?> deleteTrack(@PathVariable String id)
-    {
+    public ResponseEntity<?> deleteTrack(@PathVariable String id) throws TrackNotFoundException {
         ResponseEntity responseEntity;
-        try {
-            trackService.deleteTrack(Integer.parseInt(id));
-            responseEntity=new ResponseEntity<String>("Successfully deleted",HttpStatus.OK);
-        }
-        catch (TrackNotFoundException ex)
-        {
-            responseEntity = new ResponseEntity<String>(ex.getMessage(),HttpStatus.CONFLICT);
-        }
+        trackService.deleteTrack(Integer.parseInt(id));
+        responseEntity=new ResponseEntity<String>("Successfully deleted",HttpStatus.OK);
         return responseEntity;
     }
 
     @GetMapping(value = "/track/{id}")
-    public ResponseEntity<?> getByIdTrack(@PathVariable int id)
-    {
+    public ResponseEntity<?> getByIdTrack(@PathVariable int id) throws TrackNotFoundException {
         ResponseEntity responseEntity;
-        try {
-
-            return new ResponseEntity<Optional<Track>>(trackService.getTrackById(id),HttpStatus.OK);
-        }
-        catch (TrackNotFoundException ex)
-        {
-            responseEntity = new ResponseEntity<String>(ex.getMessage(),HttpStatus.CONFLICT);
-        }
-        return responseEntity;
+        return new ResponseEntity<Optional<Track>>(trackService.getTrackById(id),HttpStatus.OK);
     }
-    @GetMapping(value = "/tracks/{name}")
-    public ResponseEntity<List<Track>> findByName(@PathVariable String name)
-    {
-        ResponseEntity responseEntity;
-        try {
 
-            return new ResponseEntity <List<Track>>(trackService.findByName(name),HttpStatus.OK);
-        }
-        catch (TrackNotFoundException ex)
-        {
-            responseEntity = new ResponseEntity<String>(ex.getMessage(),HttpStatus.CONFLICT);
-        }
-        return responseEntity;
+    @GetMapping(value = "/tracks/{name}")
+    public ResponseEntity<List<Track>> findByName(@PathVariable String name) throws TrackNotFoundException {
+        ResponseEntity responseEntity;
+        return new ResponseEntity <List<Track>>(trackService.findByName(name),HttpStatus.OK);
     }
 }

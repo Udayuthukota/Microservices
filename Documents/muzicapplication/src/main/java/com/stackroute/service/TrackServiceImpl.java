@@ -22,7 +22,7 @@ public class TrackServiceImpl implements TrackService{
         this.trackRepository=trackRepository;
     }
     @Override
-    public Track saveTrack(Track track) throws TrackAlreadyExistsException {
+    public Track saveTrack(Track track) throws TrackAlreadyExistsException  {
         if(trackRepository.existsById(track.getTrackId())){
             throw new TrackAlreadyExistsException("Track already exists");
         }
@@ -36,7 +36,7 @@ public class TrackServiceImpl implements TrackService{
     }
 
     @Override
-    public boolean deleteTrack(int id) throws TrackNotFoundException{
+    public boolean deleteTrack(int id) throws TrackNotFoundException {
         if(!trackRepository.existsById(id)){
             throw new TrackNotFoundException("Track not found");
         }
