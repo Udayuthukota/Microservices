@@ -5,7 +5,6 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.ApplicationListener;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
@@ -32,7 +31,6 @@ public class PrefillUsingCommandLineRunner implements CommandLineRunner, Applica
         Statement statement=connection.createStatement();
         statement.executeUpdate("insert into track(track_id,track_comments,track_name) values(1,'ed shareen','perfect')");
         System.out.println("command line runner executed");
-
     }
 
     @Override
@@ -41,7 +39,6 @@ public class PrefillUsingCommandLineRunner implements CommandLineRunner, Applica
         Statement statement=connection.createStatement();
         statement.executeUpdate("insert into track(track_id,track_comments,track_name) values(2,'lol','lol')");
         System.out.println("application line runner executed");
-
     }
 
     @Override
@@ -64,6 +61,5 @@ public class PrefillUsingCommandLineRunner implements CommandLineRunner, Applica
             e.printStackTrace();
         }
         System.out.println("context refreshed executed");
-
     }
 }

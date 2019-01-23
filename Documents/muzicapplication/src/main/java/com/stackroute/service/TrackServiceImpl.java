@@ -1,12 +1,13 @@
 package com.stackroute.service;
 
 import com.stackroute.domain.Track;
+import com.stackroute.exception.TrackAlreadyExistsException;
+import com.stackroute.exception.TrackNotFoundException;
 import com.stackroute.repository.TrackRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,7 +22,10 @@ public class TrackServiceImpl implements TrackService{
         this.trackRepository=trackRepository;
     }
     @Override
-    public Track saveTrack(Track track) {
+    public Track saveTrack(Track track) throws TrackAlreadyExistsException {
+        if(trackRepository.existsById(track.getTrackId())){
+            throw new TrackAlreadyExistsException("Track already exists");
+        }
         Track savedTrack=trackRepository.save(track);
         return savedTrack;
     }
@@ -32,13 +36,19 @@ public class TrackServiceImpl implements TrackService{
     }
 
     @Override
-    public boolean deleteTrack(int id) {
+    public boolean deleteTrack(int id) throws TrackNotFoundException{
+        if(!trackRepository.existsById(id)){
+            throw new TrackNotFoundException("Track not found");
+        }
         trackRepository.deleteById(id);
         return true;
     }
 
     @Override
-    public ResponseEntity<Object> updateTrack(Track track,int id) {
+    public ResponseEntity<Object> updateTrack(Track track,int id) throws TrackNotFoundException {
+        if(!trackRepository.existsById(id)){
+            throw new TrackNotFoundException("Track not found");
+        }
         Optional<Track> trackOptional = trackRepository.findById(id);
         if (!trackOptional.isPresent())
             return ResponseEntity.notFound().build();
@@ -48,8 +58,10 @@ public class TrackServiceImpl implements TrackService{
     }
 
     @Override
-    public Optional<Track> getTrackById(int id) {
-
+    public Optional<Track> getTrackById(int id) throws TrackNotFoundException {
+        if(!trackRepository.existsById(id)){
+            throw new TrackNotFoundException("Track not found");
+        }
         if(trackRepository.existsById(id))
         {
             return trackRepository.findById(id);
@@ -59,7 +71,6 @@ public class TrackServiceImpl implements TrackService{
 
     @Override
     public List<Track> findByName(String name) {
-//        List<Track> tracks = (ResponseEntity<ArrayList<Track>>) trackRepository.findByName(name);
         return trackRepository.findByName(name);
     }
 }

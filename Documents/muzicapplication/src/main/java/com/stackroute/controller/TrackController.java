@@ -1,13 +1,13 @@
 package com.stackroute.controller;
 import com.stackroute.domain.Track;
+import com.stackroute.exception.TrackAlreadyExistsException;
+import com.stackroute.exception.TrackNotFoundException;
 import com.stackroute.service.TrackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,7 +15,7 @@ import java.util.Optional;
 @RequestMapping(value = "api/v1")
 public class TrackController {
 
-    TrackService trackService;
+    private TrackService trackService;
 
     @Autowired
     public TrackController(TrackService trackService)
@@ -32,14 +32,14 @@ public class TrackController {
             trackService.saveTrack(track);
             responseEntity=new ResponseEntity<String>("Successfully Created", HttpStatus.CREATED);
         }
-        catch( Exception ex)
+        catch(TrackAlreadyExistsException ex)
         {
             responseEntity=new ResponseEntity<String>(ex.getMessage(),HttpStatus.CONFLICT);
         }
         return responseEntity;
     }
 
-    @GetMapping("track")
+    @GetMapping("tracks")
     public ResponseEntity<List<Track>> getAllUser()
     {
         ResponseEntity responseEntity;
@@ -62,7 +62,7 @@ public class TrackController {
             trackService.updateTrack(track,id);
             responseEntity=new ResponseEntity<String>("Successfully Updated", HttpStatus.CREATED);
         }
-        catch( Exception ex)
+        catch(TrackNotFoundException ex)
         {
             responseEntity=new ResponseEntity<String>(ex.getMessage(),HttpStatus.CONFLICT);
         }
@@ -77,7 +77,7 @@ public class TrackController {
             trackService.deleteTrack(Integer.parseInt(id));
             responseEntity=new ResponseEntity<String>("Successfully deleted",HttpStatus.OK);
         }
-        catch (Exception ex)
+        catch (TrackNotFoundException ex)
         {
             responseEntity = new ResponseEntity<String>(ex.getMessage(),HttpStatus.CONFLICT);
         }
@@ -92,7 +92,7 @@ public class TrackController {
 
             return new ResponseEntity<Optional<Track>>(trackService.getTrackById(id),HttpStatus.OK);
         }
-        catch (Exception ex)
+        catch (TrackNotFoundException ex)
         {
             responseEntity = new ResponseEntity<String>(ex.getMessage(),HttpStatus.CONFLICT);
         }
@@ -106,12 +106,10 @@ public class TrackController {
 
             return new ResponseEntity <List<Track>>(trackService.findByName(name),HttpStatus.OK);
         }
-        catch (Exception ex)
+        catch (TrackNotFoundException ex)
         {
             responseEntity = new ResponseEntity<String>(ex.getMessage(),HttpStatus.CONFLICT);
         }
         return responseEntity;
     }
-
-
 }
