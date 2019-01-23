@@ -6,9 +6,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
+
 
 @Repository
 public interface TrackRepository extends JpaRepository<Track,Integer> {
-    @Query("select q from Track q where q.musicName = ?1")
-    List<Track> findByName(String name);
+    @Query("select t from Track t where t.trackName =?1")
+    List<Track> findByName(String Name);
 }

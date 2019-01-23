@@ -1,20 +1,17 @@
 package com.stackroute.service;
 
 import com.stackroute.domain.Track;
-import com.stackroute.repository.TrackRepository;
+import org.springframework.http.ResponseEntity;
+
+import java.util.ArrayList;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import java.util.Optional;
 
-@Service
-public class TrackService implements ITrackService {
-
-    @Autowired
-    private TrackRepository repository;
-
-    @Override
-    public List<Track> findByName(String name) {
-        List<Track> tracks = (List<Track>) repository.findByName(name);
-        return tracks;
-    }
+public interface TrackService {
+    public Track saveTrack(Track track);
+    public List<Track> getAllTrack();
+    public boolean deleteTrack(int id);
+    public ResponseEntity<Object> updateTrack(Track track, int id);
+    public Optional<Track> getTrackById(int id);
+    public List<Track> findByName(String name);
 }
