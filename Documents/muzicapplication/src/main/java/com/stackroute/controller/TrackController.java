@@ -44,7 +44,7 @@ public class TrackController {
     public ResponseEntity<?> updateTrack(@RequestBody Track track, @PathVariable int id) throws TrackNotFoundException {
         ResponseEntity responseEntity;
         trackService.updateTrack(track,id);
-        responseEntity=new ResponseEntity<String>("Successfully Updated", HttpStatus.CREATED);
+        responseEntity=new ResponseEntity<String>("Successfully Updated", HttpStatus.ACCEPTED);
         return responseEntity;
     }
 

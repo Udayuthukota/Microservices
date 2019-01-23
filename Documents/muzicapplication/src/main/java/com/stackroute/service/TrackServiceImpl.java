@@ -50,10 +50,8 @@ public class TrackServiceImpl implements TrackService{
             throw new TrackNotFoundException("Track not found");
         }
         Optional<Track> trackOptional = trackRepository.findById(id);
-        if (!trackOptional.isPresent())
-            return ResponseEntity.notFound().build();
-        track.setTrackId(id);
-        trackRepository.save(track);
+        trackOptional.get().setTrackComments(track.getTrackComments());
+        trackRepository.save(trackOptional.get());
         return ResponseEntity.noContent().build();
     }
 
