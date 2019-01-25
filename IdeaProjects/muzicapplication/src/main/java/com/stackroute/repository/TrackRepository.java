@@ -8,6 +8,5 @@ import java.util.List;
 
 @Repository
 public interface TrackRepository extends MongoRepository<Track,Integer> {
-//    @Query("select t from Track t where t.trackName =?1")
-//    List<Track> findByName(String Name);
+
 }
