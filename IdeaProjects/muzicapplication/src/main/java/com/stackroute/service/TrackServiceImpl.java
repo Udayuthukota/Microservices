@@ -5,6 +5,7 @@ import com.stackroute.exception.TrackAlreadyExistsException;
 import com.stackroute.exception.TrackNotFoundException;
 import com.stackroute.repository.TrackRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,7 @@ public class TrackServiceImpl implements TrackService{
     {
         this.trackRepository=trackRepository;
     }
+
     @Override
     public Track saveTrack(Track track) throws TrackAlreadyExistsException  {
         if(trackRepository.existsById(track.getTrackId())){
@@ -45,14 +47,14 @@ public class TrackServiceImpl implements TrackService{
     }
 
     @Override
-    public ResponseEntity<Object> updateTrack(Track track,int id) throws TrackNotFoundException {
+    public ResponseEntity<Track> updateTrack(Track track,int id) throws TrackNotFoundException {
         if(!trackRepository.existsById(id)){
             throw new TrackNotFoundException("Track not found");
         }
         Optional<Track> trackOptional = trackRepository.findById(id);
         trackOptional.get().setTrackComments(track.getTrackComments());
         trackRepository.save(trackOptional.get());
-        return ResponseEntity.noContent().build();
+        return new ResponseEntity<Track>(track, HttpStatus.OK);
     }
 
     @Override
@@ -60,15 +62,6 @@ public class TrackServiceImpl implements TrackService{
         if(!trackRepository.existsById(id)){
             throw new TrackNotFoundException("Track not found");
         }
-        if(trackRepository.existsById(id))
-        {
-            return trackRepository.findById(id);
-        }
-        return null;
+        return trackRepository.findById(id);
     }
-
-//    @Override
-//    public List<Track> findByName(String name) {
-//        return trackRepository.findByName(name);
-//    }
 }

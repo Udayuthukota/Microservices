@@ -12,7 +12,6 @@ public interface TrackService {
     public Track saveTrack(Track track) throws TrackAlreadyExistsException;
     public List<Track> getAllTrack();
     public boolean deleteTrack (int id) throws TrackNotFoundException;
-    public ResponseEntity<Object> updateTrack(Track track, int id) throws TrackNotFoundException;
+    public ResponseEntity<Track> updateTrack(Track track, int id) throws TrackNotFoundException;
     public Optional<Track> getTrackById(int id) throws TrackNotFoundException;
-//    public List<Track> findByName(String name) throws TrackNotFoundException;
 }
